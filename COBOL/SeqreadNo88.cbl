@@ -1,11 +1,5 @@
-
        IDENTIFICATION DIVISION.
        PROGRAM-ID.  SeqReadNo88.
-       AUTHOR.  Michael Coughlan.
-       * An example showing how to read a sequential file without
-       * using condition names.
-       * See SeqRead.CBL for the definitive example.
-
 
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.

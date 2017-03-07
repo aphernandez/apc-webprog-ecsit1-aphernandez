@@ -1,55 +1,46 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID.  InputSort.
+       PROGRAM-ID. CS4321-95-COBOL-EXAM.
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-       SELECT StudentFile ASSIGN TO "SORTSTUD.DAT"
-             ORGANIZATION IS LINE SEQUENTIAL.
-       SELECT WorkFile ASSIGN TO "WORK.TMP".
+           SELECT Sales-File ASSIGN TO "SALES.DAT"
+                 ORGANIZATION IS LINE SEQUENTIAL.
 
+           SELECT Work-File ASSIGN TO "SORT.TMP".
+
+           SELECT Summary-Report ASSIGN TO "AROMASALES.RPT"
+                 ORGANIZATION IS LINE SEQUENTIAL.
+
+
+           SELECT Sorted-File ASSIGN TO "SORTSALE.DAT"
+                 ORGANIZATION IS LINE SEQUENTIAL.
 
        DATA DIVISION.
        FILE SECTION.
-       FD StudentFile.
-       01 StudentDetails      PIC X(30).
+       FD Sales-File.
+       01  Sales-Rec.
+           88 End-Of-Sales-File    VALUE HIGH-VALUES.
+           02  SF-Cust-Id              PIC X(5).
+           02  SF-Cust-Name            PIC X(20).
+           02  SF-Oil-Id.
+                03  FILLER              PIC X.
+           88 Essential-Oil   VALUE "E".
+                03  SF-Oil-Name         PIC 99.
+           02 SF-Unit-Size             PIC 99.
+           02 SF-Units-Sold            PIC 999.
+       SD Work-File.
+       01 Work-Rec.
+           88 End-Of-Work-File VALUE HIGH-VALUES.
+       02  WF-Cust-Id              PIC X(5).
+       02  WF-Cust-Name            PIC X(20).
+       02  WF-Oil-Id.
+            03 FILLER               PIC X.
+            03 WF-Oil-Num           PIC 99.
+       02 WF-Unit-Size             PIC 99.
+       02 WF-Units-Sold            PIC 999.
 
+       FD Summary-Report.
+       01 Print-Line                   PIC X(64).
 
-
-
-       SD WorkFile.
-       01 WorkRec.
-        02 WStudentId       PIC 9(7).
-        02 FILLER           PIC X(23).
-
-       WORKING-STORAGE SECTION.
-
-       01  Oils-Table.
-           02  Oil-Cost-Values.
-               03 FILLER               PIC X(40)
-                VALUE "0041003200450050002910250055003900650075".
-               03 FILLER               PIC X(40)
-                VALUE "0080004400500063006500550085004812500065".
-               03 FILLER               PIC X(40)
-                VALUE "0060005500670072006501250085006511150105".
-           02  FILLER REDEFINES Oil-Cost-VALUES.
-               03 OIL-COST           PIC 99V99 OCCURS 30 TIMES.
-
-       PROCEDURE DIVISION.
-       Begin.
-       SORT WorkFile ON ASCENDING KEY WStudentId
-        INPUT PROCEDURE IS GetStudentDetails
-        GIVING StudentFile.
-       STOP RUN.
-
-
-       GetStudentDetails.
-       DISPLAY "Enter student details using template below."
-       DISPLAY "Enter no data to end.".
-       DISPLAY "Enter - StudId, Surname, Initials, YOB, MOB, DOB,
-       Course, Gender"
-       DISPLAY "NNNNNNNSSSSSSSSIIYYYYMMDDCCCCG"
-       ACCEPT  WorkRec.
-       PERFORM UNTIL WorkRec = SPACES
-       RELEASE WorkRec
-       ACCEPT WorkRec
-       END-PERFORM.
+       FD Sorted-File.
+       01 Sorted-Rec                   PIC X(33).
