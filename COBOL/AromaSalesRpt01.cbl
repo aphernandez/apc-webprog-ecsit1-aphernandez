@@ -110,3 +110,29 @@
            02  Sale-Qty-Sold           PIC 99999.
            02  Value-Of-Sale           PIC 999999V99.
            02  Prev-Cust-Id            PIC X(5).
+
+       PROCEDURE DIVISION.
+       Produce-Summary-Report.
+       SORT Work-File ON ASCENDING WF-Cust-Name
+         INPUT PROCEDURE IS Select-Essential-Oils
+         OUTPUT PROCEDURE IS Print-Summary-Report.
+
+       STOP RUN.
+       Select-Essential-Oils.
+       OPEN INPUT Sales-File.
+           READ Sales-File
+               AT END SET End-Of-Sales-File TO TRUE
+       END-READ.
+
+       PERFORM UNTIL End-Of-Sales-File
+               IF Essential-Oil
+                   RELEASE Work-Rec FROM Sales-Rec
+               END-IF
+       READ Sales-File
+                   AT END SET End-Of-Sales-File TO TRUE
+            END-READ
+       END-PERFORM.
+
+       CLOSE Sales-File.
+
+       Print-Summary-Report.
