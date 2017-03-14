@@ -136,3 +136,55 @@
        CLOSE Sales-File.
 
        Print-Summary-Report.
+        OPEN OUTPUT Summary-Report.
+       OPEN OUTPUT Sorted-File.
+       WRITE Print-Line FROM Report-Heading-Line AFTER ADVANCING 1 LINE.
+       WRITE Print-Line FROM Report-Heading-Underline
+                   AFTER ADVANCING 1 LINE.
+       WRITE Print-Line FROM Topic-Heading-Line AFTER ADVANCING 3 LINES.
+
+       RETURN Work-File
+        AT END SET End-Of-Work-File TO TRUE
+       END-RETURN.
+
+       PERFORM Print-Customer-Lines UNTIL End-Of-Work-File
+
+
+       MOVE Total-Sales TO Prn-Total-Sales.
+       WRITE Print-Line FROM Total-Sales-Line AFTER ADVANCING 3 LINES.
+
+       MOVE Total-Qty-Sold TO Prn-Total-Qty-Sold.
+       WRITE Print-Line FROM Total-Qty-Sold-Line
+               AFTER ADVANCING 2 LINES.
+
+       MOVE Total-Sales-Value TO Prn-Total-Sales-Value.
+       WRITE Print-Line FROM Total-Sales-Value-Line
+               AFTER ADVANCING 2 LINES.
+
+       CLOSE Summary-Report, Sorted-File.
+
+       Print-Customer-Lines.
+       MOVE ZEROS TO Cust-Totals.
+       MOVE WF-Cust-Id TO Prn-Cust-Id, Prev-Cust-Id.
+       MOVE WF-Cust-Name TO Prn-Cust-Name.
+
+       PERFORM UNTIL WF-Cust-Id NOT = Prev-Cust-Id
+        WRITE Sorted-Rec FROM Work-Rec
+        ADD 1 TO Cust-Sales, Total-Sales
+
+        COMPUTE Sale-Qty-Sold = WF-Unit-Size * WF-Units-Sold
+        ADD Sale-Qty-Sold TO Cust-Qty-Sold, Total-Qty-Sold
+
+        COMPUTE Value-Of-Sale = Sale-Qty-Sold * Oil-Cost(WF-Oil-Num)
+        ADD Value-Of-Sale TO Cust-Sales-Value, Total-Sales-Value
+
+        RETURN Work-File
+            AT END SET End-Of-Work-File TO TRUE
+        END-RETURN
+        END-PERFORM.
+
+       MOVE Cust-Sales TO Prn-Cust-Sales.
+       MOVE Cust-Qty-Sold TO Prn-Qty-Sold.
+       MOVE Cust-Sales-Value TO Prn-Sales-Value.
+
+       WRITE Print-Line FROM Cust-Sales-Line AFTER ADVANCING 2 LINES.
