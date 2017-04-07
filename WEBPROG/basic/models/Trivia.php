@@ -28,8 +28,8 @@ class Trivia extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'question', 'answer', 'profile_id'], 'required'],
-            [['id', 'profile_id'], 'integer'],
+            [['question', 'answer', 'profile_id'], 'required'],
+            [['profile_id'], 'integer'],
             [['question', 'answer'], 'string', 'max' => 100],
             [['profile_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::className(), 'targetAttribute' => ['profile_id' => 'id']],
         ];
